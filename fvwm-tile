@@ -1,0 +1,149 @@
+#!/bin/bash
+# fvwm-tile - Window tiling helper for FVVM3
+# Used by FVVM config via Exec calls and as autosnap handler
+
+SNAP_MARGIN=4
+
+# Get active window geometry
+get_active_geom() {
+    # xdotool getactivewindow getwindowgeometry --shell
+    eval $(xdotool getactivewindow getwindowgeometry --shell 2>/dev/null)
+    echo "$X $Y $WIDTH $HEIGHT"
+}
+
+# Get screen dimensions
+get_screen_dims() {
+    eval $(xdotool getdisplaygeometry 2>/dev/null)
+    echo "$WIDTH $HEIGHT"
+}
+
+# Get cursor position
+get_cursor() {
+    eval $(xdotool getmouselocation --shell 2>/dev/null)
+    echo "$X $Y"
+}
+
+# Calculate tile geometry
+tile_geom() {
+    local direction="$1"
+    local sw="$2" sh="$3"
+    local m=$SNAP_MARGIN
+    local hw=$((sw / 2 - m))
+    local hh=$((sh / 2 - m))
+    local fw=$((sw - m*2))
+    local fh=$((sh - m*2))
+
+    case "$direction" in
+        left)     echo "$m $m $hw $fh" ;;
+        right)    echo "$((sw - hw - m)) $m $hw $fh" ;;
+        up)       echo "$m $m $fw $hh" ;;
+        down)     echo "$m $((sh - hh - m)) $fw $hh" ;;
+        top-left)     echo "$m $m $hw $hh" ;;
+        top-right)    echo "$((sw - hw - m)) $m $hw $hh" ;;
+        bottom-left)  echo "$m $((sh - hh - m)) $hw $hh" ;;
+        bottom-right) echo "$((sw - hw - m)) $((sh - hh - m)) $hw $hh" ;;
+        maximize) echo "$m $m $fw $fh" ;;
+        center)   echo "$((sw/2 - fw/4)) $((sh/2 - fh/4)) $((fw/2)) $((fh/2))" ;;
+        *)        echo "0 0 $sw $sh" ;;
+    esac
+}
+
+# Tile active window
+cmd_tile() {
+    local wid
+    wid=$(xdotool getactivewindow 2>/dev/null) || exit 1
+    local direction="${1:-center}"
+    read sw sh <<< "$(get_screen_dims)"
+    read x y w h <<< "$(tile_geom "$direction" "$sw" "$sh")"
+
+    xdotool windowmove "$wid" "$x" "$y"
+    xdotool windowsize "$wid" "$w" "$h"
+    echo "Tiled $direction: ${x}x${y} ${w}x${h}"
+}
+
+# Snap daemon: monitor window position and snap to edges
+cmd_daemon() {
+    local threshold=30
+    local bounce=6
+    local prev_wid=""
+    local prev_x="" prev_y=""
+
+    while true; do
+        wid=$(xdotool getactivewindow 2>/dev/null) || { sleep 0.1; continue; }
+
+        # Get window position
+        eval $(xdotool getactivewindow getwindowgeometry --shell 2>/dev/null)
+        local cx="$X" cy="$Y"
+
+        # Get mouse position
+        eval $(xdotool getmouselocation --shell 2>/dev/null)
+        local px="$X" py="$Y"
+
+        # Get screen size
+        read sw sh <<< "$(get_screen_dims)"
+
+        # If window moved and we have a previous position
+        if [ "$wid" = "$prev_wid" ] && [ -n "$prev_x" ] && [ -n "$prev_y" ]; then
+            local dx=$((cx - prev_x))
+            local dy=$((cy - prev_y))
+            local moved=$((dx * dx + dy * dy))
+
+            if [ "$moved" -gt 25 ]; then
+                # Check screen edge proximity
+                local zone=""
+                [ "$px" -le "$threshold" ] && zone="L"
+                [ "$px" -ge "$((sw - threshold))" ] && zone="${zone}R"
+                [ "$py" -le "$threshold" ] && zone="${zone}T"
+                [ "$py" -ge "$((sh - threshold))" ] && zone="${zone}B"
+
+                case "$zone" in
+                    "LT") direction="top-left" ;;
+                    "RT") direction="top-right" ;;
+                    "LB") direction="bottom-left" ;;
+                    "RB") direction="bottom-right" ;;
+                    "L")  direction="left" ;;
+                    "R")  direction="right" ;;
+                    "T")  direction="up" ;;
+                    "B")  direction="down" ;;
+                    *)    direction="" ;;
+                esac
+
+                if [ -n "$direction" ]; then
+                    cmd_tile "$direction"
+                    sleep 0.3  # debounce
+                fi
+            fi
+        fi
+
+        prev_wid="$wid"
+        prev_x="$cx"
+        prev_y="$cy"
+        sleep 0.08
+    done
+}
+
+# Main
+case "${1:-help}" in
+    tile|snap|t)
+        shift
+        cmd_tile "$@"
+        ;;
+    daemon|d|snapd)
+        cmd_daemon
+        ;;
+    help|--help|-h)
+        echo "Usage: fvwm-tile <command> [direction]"
+        echo ""
+        echo "Commands:"
+        echo "  tile <direction>   Tile active window"
+        echo "  daemon             Run snapping daemon (drag-to-edge)"
+        echo ""
+        echo "Directions:"
+        echo "  left right up down"
+        echo "  top-left top-right bottom-left bottom-right"
+        echo "  maximize center"
+        ;;
+    *)
+        cmd_tile "$@"
+        ;;
+esac

@@ -1,0 +1,24 @@
+{
+    "KPlugin": {
+        "Name": "Window Tiler",
+        "Description": "Directional window tiling with edge snapping and custom decoration buttons",
+        "Icon": "window",
+        "Authors": [
+            {
+                "Name": "Window Tiler",
+                "Email": ""
+            }
+        ],
+        "Id": "windowtiler",
+        "Version": "1.0",
+        "License": "GPL-2.0+",
+        "Website": "",
+        "Category": "Window Management",
+        "ServiceTypes": [
+            "KWin/Script"
+        ]
+    },
+    "X-KDE-Ordered": true,
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}

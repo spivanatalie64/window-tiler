@@ -1,0 +1,129 @@
+# Window Tiler - Tile & Snap Functions for FVVM3
+# ===============================================
+
+# Snap to screen edges (used by autosnap and title buttons)
+# These functions tile the active window to various positions
+
+DestroyFunc FuncTileUp
+AddToFunc FuncTileUp
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 100wa 50wa 0 0
+
+DestroyFunc FuncTileDown
+AddToFunc FuncTileDown
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 100wa 50wa 0 -0
+
+DestroyFunc FuncTileLeft
+AddToFunc FuncTileLeft
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 50wa 100wa 0 0
+
+DestroyFunc FuncTileRight
+AddToFunc FuncTileRight
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 50wa 100wa -0 0
+
+DestroyFunc FuncTileTopLeft
+AddToFunc FuncTileTopLeft
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 50wa 50wa 0 0
+
+DestroyFunc FuncTileTopRight
+AddToFunc FuncTileTopRight
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 50wa 50wa -0 0
+
+DestroyFunc FuncTileBottomLeft
+AddToFunc FuncTileBottomLeft
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 50wa 50wa 0 -0
+
+DestroyFunc FuncTileBottomRight
+AddToFunc FuncTileBottomRight
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 50wa 50wa -0 -0
+
+DestroyFunc FuncTileMaximize
+AddToFunc FuncTileMaximize
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize true 100 100
+
+DestroyFunc FuncTileCenter
+AddToFunc FuncTileCenter
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 60wa 60wa c c
+
+DestroyFunc FuncTileRestore
+AddToFunc FuncTileRestore
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) Maximize false
++ I ThisWindow (!Maximized, !FullScreen, !FixedSize, !Iconic) ResizeMove frame 70wa 70wa c c
+
+DestroyFunc FuncTileNextMonitor
+AddToFunc FuncTileNextMonitor
++ I MoveToMonitor Next CurrentPage PlaceByMouse
+
+# ===============================================
+# BUTTON CLICK FUNCTIONS (for title bar buttons)
+# ===============================================
+# When a button is clicked, this function is called
+
+# Button 3 = Snap Up
+DestroyFunc FuncButton3
+AddToFunc FuncButton3
++ I FuncTileUp
+
+# Button 5 = Snap Down
+DestroyFunc FuncButton5
+AddToFunc FuncButton5
++ I FuncTileDown
+
+# Button 7 = Snap Left
+DestroyFunc FuncButton7
+AddToFunc FuncButton7
++ I FuncTileLeft
+
+# Button 8 = Snap Right
+DestroyFunc FuncButton8
+AddToFunc FuncButton8
++ I FuncTileRight
+
+# Button 2 = Close (standard)
+# (built-in)
+
+# Button 4 = Maximize (standard)
+# (built-in)
+
+# Button 6 = Minimize (standard)
+# (built-in)
+
+# ===============================================
+# KEYBOARD SHORTCUTS
+# ===============================================
+Key Left  A 4 M FuncTileLeft
+Key Right A 4 M FuncTileRight
+Key Up    A 4 M FuncTileUp
+Key Down  A 4 M FuncTileDown
+
+# Ctrl+Alt+Shift+Arrow for quadrants
+Key Left  A 4 CSM FuncTileTopLeft
+Key Right A 4 CSM FuncTileTopRight
+Key Up    A 4 CSM FuncTileTopLeft
+Key Down  A 4 CSM FuncTileBottomLeft
+# Hmm this doesn't work cleanly. Let's use NumPad instead.
+
+# Numpad shortcuts
+Key KP_7 A 4 FuncTileTopLeft
+Key KP_8 A 4 FuncTileUp
+Key KP_9 A 4 FuncTileTopRight
+Key KP_4 A 4 FuncTileLeft
+Key KP_5 A 4 FuncTileCenter
+Key KP_6 A 4 FuncTileRight
+Key KP_1 A 4 FuncTileBottomLeft
+Key KP_2 A 4 FuncTileDown
+Key KP_3 A 4 FuncTileBottomRight
+
+# Win+Shift+Arrow for fine movement
+Key Left  A 4 SM Move -20 0
+Key Right A 4 SM Move +20 0
+Key Up    A 4 SM Move 0 -20
+Key Down  A 4 SM Move 0 +20

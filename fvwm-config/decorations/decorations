@@ -1,0 +1,108 @@
+# Window Tiler - FVVM3 Window Decorations
+# =========================================
+#
+#  LEFT:  [▲] [▼] [◀] [▶]  - Directional snap (indices 3,5,7,8)
+#  RIGHT: [✕] [─] [□]       - Close(2) / Minimize(6) / Maximize(4)
+#
+# Standard button indices: 1=Menu, 2=Close, 4=Maximize, 6=Minimize
+# We use: 3,5,7,8 for custom directional snap buttons
+
+ICONDIR $[HOME]/.fvwm/decorations/icons
+
+# ============================
+# DECORATION STYLE
+# ============================
+Style * BorderWidth 4, HandleWidth 4, MWMButtons
+Style * Title, TitleAtTop
+Style * DecorateTransient, StackTransientParent
+Style * TitleHeight 28
+
+# ============================
+# COLORS
+# ============================
+Colorset 30 fg #ffffff, bg #2980b9, bgHFocus #1a5276
+Colorset 31 fg #bdc3c7, bg #2c3e50, bgHFocus #34495e
+Colorset 32 fg #ffffff, bg #c0392b, bgHFocus #e74c3c  # close hover
+
+# Active
+TitleStyle ActiveColorset 30
+TitleStyle ActiveDecorationColorset 30
+TitleStyle ActiveButtonColorset 30
+TitleStyle ActiveForeground #ffffff
+TitleStyle ActiveBackground #2980b9
+TitleStyle ActiveFont "xft:Noto Sans:size=10:bold"
+
+# Inactive
+TitleStyle InactiveColorset 31
+TitleStyle InactiveDecorationColorset 31
+TitleStyle InactiveButtonColorset 31
+TitleStyle InactiveForeground #bdc3c7
+TitleStyle InactiveBackground #2c3e50
+TitleStyle InactiveFont "xft:Noto Sans:size=9"
+
+# Global title bar settings
+TitleStyle Height 28
+TitleStyle Centered
+TitleStyle MinimumWidth 80
+TitleStyle LeftEdge 2
+TitleStyle RightEdge 2
+TitleStyle TopEdge 2
+TitleStyle BottomEdge 2
+TitleStyle -- Flat
+
+# ============================
+# GENERIC BUTTON STYLE (flat, no border)
+# ============================
+ButtonStyle All ActiveUp Vector 5 5x5@4 5x95@3 95x95@3 95x5@3 5x5@3 -- Flat
+ButtonStyle All ToggledActiveUp Vector 5 5x5@4 5x95@3 95x95@3 95x5@3 5x5@3 -- Flat
+ButtonStyle All ActiveDown Vector 5 8x8@4 8x92@3 92x92@3 92x8@3 8x8@3 -- Flat
+ButtonStyle All ToggledActiveDown Vector 5 8x8@4 8x92@3 92x92@3 92x8@3 8x8@3 -- Flat
+ButtonStyle All Inactive Vector 5 5x5@4 5x95@3 95x95@3 95x5@3 5x5@3 -- Flat
+ButtonStyle All ToggledInactive Vector 5 5x5@4 5x95@3 95x95@3 95x5@3 5x5@3 -- Flat
+ButtonStyle All - Clear
+
+# ============================
+# CUSTOM PIXMAP BUTTONS
+# ============================
+
+# Directional Snap Buttons (indices 3, 5, 7, 8)
+# Button 3 = Snap Up 
+AddButtonStyle 3 Active Pixmap arrow_up.xpm -- Flat
+AddButtonStyle 3 Inactive Pixmap arrow_up.xpm -- Flat
+
+# Button 5 = Snap Down
+AddButtonStyle 5 Active Pixmap arrow_down.xpm -- Flat
+AddButtonStyle 5 Inactive Pixmap arrow_down.xpm -- Flat
+
+# Button 7 = Snap Left
+AddButtonStyle 7 Active Pixmap arrow_left.xpm -- Flat
+AddButtonStyle 7 Inactive Pixmap arrow_left.xpm -- Flat
+
+# Button 8 = Snap Right
+AddButtonStyle 8 Active Pixmap arrow_right.xpm -- Flat
+AddButtonStyle 8 Inactive Pixmap arrow_right.xpm -- Flat
+
+# Standard buttons with custom pixmaps
+# Button 2 = Close
+AddButtonStyle 2 Active Pixmap close.xpm -- Flat
+AddButtonStyle 2 Inactive Pixmap close.xpm -- Flat
+
+# Button 4 = Maximize
+AddButtonStyle 4 Active Pixmap maximize.xpm -- Flat
+AddButtonStyle 4 ToggledActiveUp Pixmap restore.xpm -- Flat
+AddButtonStyle 4 ToggledActiveDown Pixmap restore.xpm -- Flat
+AddButtonStyle 4 ToggledInactive Pixmap restore.xpm -- Flat
+AddButtonStyle 4 Inactive Pixmap maximize.xpm -- Flat
+
+# Button 6 = Minimize
+AddButtonStyle 6 Active Pixmap minimize.xpm -- Flat
+AddButtonStyle 6 Inactive Pixmap minimize.xpm -- Flat
+
+# ============================
+# BUTTON ORDER
+# ============================
+# Left:  3=Up, 5=Down, 7=Left, 8=Right
+# Right: 2=Close, 6=Minimize, 4=Maximize
+# (1 = Menu, but we don't want it)
+TitleButtonOrderLeft 3 5 7 8
+TitleButtonOrderRight 2 6 4

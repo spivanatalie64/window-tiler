@@ -1,0 +1,139 @@
+# Window Tiler - FVVM Decoration Configuration
+# =============================================
+#
+# LEFT (directional snap):  Up  Down  Left  Right
+# RIGHT (window controls):  Close  Minimize  Maximize
+#
+# FVVM button index mapping used here:
+#   1 = Snap Up       (replaces Menu)
+#   2 = Snap Down     (replaces Shade)
+#   3 = Snap Left     (replaces ?)
+#   4 = Snap Right    (replaces ?)
+#   6 = Close
+#   7 = Minimize      (replaces ?)
+#   8 = Maximize/Restore
+#
+# Note: These override the typical Menu/Shade/etc. behavior.
+# The window menu is available via right-click on title bar.
+
+ICONDIR $[HOME]/.fvwm/decorations/icons
+
+# ============================================================
+# COLORSETS
+# ============================================================
+
+# Active window
+Colorset 20 fg #ffffff, bg #2980b9, bgHFocus #1a5276, fgHFocus #ffffff
+Colorset 20 fg #ffffff, bg #2980b9
+Colorset 21 fg #ffffff, bg #1a5276
+Colorset 22 fg #ffffff, bg #c0392b
+
+# Inactive window
+Colorset 23 fg #bdc3c7, bg #2c3e50
+Colorset 24 fg #ecf0f1, bg #34495e
+
+# ============================================================
+# TITLE STYLE
+# ============================================================
+
+TitleStyle ActiveColorset 20
+TitleStyle ActiveDecorationColorset 20
+TitleStyle ActiveButtonColorset 20
+TitleStyle InactiveColorset 23
+TitleStyle InactiveDecorationColorset 23
+TitleStyle InactiveButtonColorset 23
+
+TitleStyle Height 28
+TitleStyle Centered
+TitleStyle MinimumWidth 80
+TitleStyle ActiveFont "xft:Noto Sans:size=10:bold"
+TitleStyle InactiveFont "xft:Noto Sans:size=9"
+TitleStyle ActiveForeground #ffffff
+TitleStyle InactiveForeground #bdc3c7
+TitleStyle ActiveBackground #2980b9
+TitleStyle InactiveBackground #2c3e50
+TitleStyle BorderWidth 2
+TitleStyle LeftEdge 2
+TitleStyle RightEdge 2
+TitleStyle TopEdge 2
+TitleStyle BottomEdge 2
+
+# ============================================================
+# DECORATION PIXMAPS
+# ============================================================
+
+# ---- LEFT SIDE: Directional Snap Buttons ----
+# We use button indices 1-4 for directional snaps
+# These are custom buttons (not standard FVVM types)
+
+# Button 1 = Snap Up (arrow_up)
+Style * Button1Pixmap arrow_up.xpm
+Style * Button1LeftPixmap arrow_up.xpm
+Style * Button1RightPixmap arrow_up.xpm
+
+# Button 2 = Snap Down (arrow_down)
+Style * Button2Pixmap arrow_down.xpm
+Style * Button2LeftPixmap arrow_down.xpm
+Style * Button2RightPixmap arrow_down.xpm
+
+# Button 3 = Snap Left (arrow_left)
+Style * Button3Pixmap arrow_left.xpm
+Style * Button3LeftPixmap arrow_left.xpm
+Style * Button3RightPixmap arrow_left.xpm
+
+# Button 4 = Snap Right (arrow_right)
+Style * Button4Pixmap arrow_right.xpm
+Style * Button4LeftPixmap arrow_right.xpm
+Style * Button4RightPixmap arrow_right.xpm
+
+# ---- RIGHT SIDE: Window Controls ----
+
+# Close button (red X)
+Style * CloseButtonPixmap close.xpm
+Style * CloseButtonLeftPixmap close.xpm
+Style * CloseButtonRightPixmap close.xpm
+
+# Minimize button (underscore)
+Style * IconifyButtonPixmap minimize.xpm
+Style * IconifyButtonLeftPixmap minimize.xpm
+Style * IconifyButtonRightPixmap minimize.xpm
+
+# Maximize/Restore buttons
+Style * MaximizeButtonPixmap maximize.xpm
+Style * MaximizeButtonLeftPixmap maximize.xpm
+Style * MaximizeButtonRightPixmap maximize.xpm
+Style * RestoreButtonPixmap restore.xpm
+Style * RestoreButtonLeftPixmap restore.xpm
+Style * RestoreButtonRightPixmap restore.xpm
+
+# ============================================================
+# BUTTON ORDER IN TITLE BAR
+# ============================================================
+# Left side: 1(Up) 2(Down) 3(Left) 4(Right)
+# Right side: Close, Minimize, Maximize
+
+TitleButtonOrderLeft  1 2 3 4
+TitleButtonOrderRight 6 7 8
+# 6=Close, 7=Minimize, 8=Maximize (by convention)
+# Actually let's use exact standard indices:
+# Standard FVVM: 1=Menu, 2=Minimize, 4=Maximize, 6=Close
+# We'll reassign:
+# Button 1 -> Snap Up (our custom pixmap)
+# Button 2 -> Snap Down (our custom pixmap)
+# Button 3 -> Snap Left (our custom pixmap)
+# Button 4 -> Snap Right (our custom pixmap)
+# Button 6 -> Close (standard close)
+# For minimize and maximize we need different indices
+# In FVVM the "standard" buttons recognized are:
+#   1 = Menu
+#   2 = Iconify (minimize)
+#   4 = Maximize
+#   6 = Close
+# So we need to arrange: Close(6), Minimize(2), Maximize(4) on right
+# and our 4 custom buttons on left using non-standard indices
+
+# Let's redo this properly:
+TitleButtonOrderLeft  10 11 12 13
+TitleButtonOrderRight 6 2 4
+
+# Buttons 10-13 are custom indices we need to define

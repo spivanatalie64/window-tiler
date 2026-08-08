@@ -1,0 +1,11 @@
+[Unit]
+Description=Window Tiler Daemon
+After=plasma-core.target
+
+[Service]
+ExecStart=%h/Projects/OpenCode_Projects/window-tiler/tiler-daemon.py daemon
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=plasma-core.target

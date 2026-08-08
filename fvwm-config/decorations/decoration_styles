@@ -1,0 +1,72 @@
+# Window Decoration Styles for FVVM3
+# Left buttons: UP, DOWN, LEFT, RIGHT (directional snap)
+# Right buttons: CLOSE, MINIMIZE, MAXIMIZE
+
+# ---- Colors ----
+TitleColorset 4 fg #ffffff, bg #2980b9, bgHFocus #2c3e50, fgHFocus #ffffff, bgFocus #2980b9, fgFocus #ffffff
+TitleColorset 5 fg #ffffff, bg #2c3e50, bgHFocus #34495e, fgHFocus #ffffff, bgFocus #2c3e50, fgFocus #ffffff
+
+# ---- Button Colorsets ----
+ButtonStyle All -- UseTitleStyle
+ButtonColorset 6 fg #ffffff, bg #2980b9, bgHFocus #3498db, fgHFocus #ffffff, bgFocus #2980b9, fgFocus #ffffff
+ButtonColorset 7 fg #ffffff, bg #2c3e50, bgHFocus #34495e, fgHFocus #ffffff, bgFocus #2c3e50, fgFocus #ffffff
+
+# ---- Active window buttons (red close, blue others) ----
+ButtonColorset 8 fg #ffffff, bg #2980b9, bgHFocus #1a5276, fgHFocus #ffffff, bgFocus #2980b9, fgFocus #ffffff
+ButtonColorset 9 fg #ffffff, bg #c0392b, bgHFocus #e74c3c, fgHFocus #ffffff, bgFocus #c0392b, fgFocus #ffffff
+
+# ---- Inactive window buttons ----
+ButtonColorset 10 fg #bdc3c7, bg #2c3e50, bgHFocus #34495e, fgHFocus #ecf0f1, bgFocus #2c3e50, fgFocus #bdc3c7
+
+# ============================================================
+# DECORATION STYLES
+# ============================================================
+
+# --- Default window style ---
+Style * UseTitleStyles
+Style * BorderWidth 4, HandleWidth 4
+Style * MWMButtons
+Style * Title
+Style * TitleAtTop
+Style * Colorset 4
+Style * HilightColorset 5
+Style * TitleColorset 4
+Style * HilightTitleColorset 5
+Style * BorderColorset 4
+Style * HilightBorderColorset 5
+
+# --- Title bar height ---
+Style * TitleHeight 30
+
+# --- Font ---
+Style * Font "xft:Noto Sans:size=10:bold"
+Style * UseTitleStyle
+
+# ---- LEFT SIDE: Directional Snap Buttons ----
+# WindowShade Up, WindowShade Down (toggle shade)
+# Direction buttons: Up, Down, Left, Right tile
+Style * ButtonLeftPixmap arrows_up.svg
+Style * ButtonLeftPixmap arrows_down.svg
+Style * ButtonLeftPixmap arrows_left.svg
+Style * ButtonLeftPixmap arrows_right.svg
+
+# ---- RIGHT SIDE: Close, Minimize, Maximize ----
+Style * ClosePixmap close.svg
+Style * IconifyPixmap iconify.svg
+Style * MaximizePixmap maximize.svg
+
+# ============================================================
+# BUTTON ORDER
+# ============================================================
+# FVVM button indices:
+#   1=Menu   2=Minimize  4=Maximize  6=Close
+#   8=Shade  16=Stick  32=Zoom  64=?
+# Custom pixmaps can be set for indices 1-8
+
+# Left side buttons (appear before title):
+Style * TitleButtonOrderLeft  1 2 8  # Menu, Shade, Zoom (we'll repurpose)
+# Actually FVVM uses AddButton with specific indices
+# Let's use AddTitleButton for custom placement
+
+# We'll define custom button functions and place them manually
+# using FvwmButtons in the title bar.

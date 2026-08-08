@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <kcfgfile name=""/>
+    <group name="General">
+        <entry name="BorderLeft" type="Int">
+            <default>28</default>
+        </entry>
+        <entry name="BorderRight" type="Int">
+            <default>28</default>
+        </entry>
+        <entry name="BorderTop" type="Int">
+            <default>32</default>
+        </entry>
+        <entry name="BorderBottom" type="Int">
+            <default>28</default>
+        </entry>
+        <entry name="BorderLeftMaximized" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="BorderRightMaximized" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="BorderTopMaximized" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="BorderBottomMaximized" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="TitleHeight" type="Int">
+            <default>32</default>
+        </entry>
+        <entry name="ButtonWidth" type="Int">
+            <default>24</default>
+        </entry>
+        <entry name="ButtonHeight" type="Int">
+            <default>24</default>
+        </entry>
+        <entry name="ButtonSpacing" type="Int">
+            <default>2</default>
+        </entry>
+        <entry name="TitleEdgeLeft" type="Int">
+            <default>4</default>
+        </entry>
+        <entry name="TitleEdgeRight" type="Int">
+            <default>4</default>
+        </entry>
+        <entry name="TitleEdgeTop" type="Int">
+            <default>4</default>
+        </entry>
+        <entry name="ActiveTextColor" type="String">
+            <default>255,255,255</default>
+        </entry>
+        <entry name="InactiveTextColor" type="String">
+            <default>192,192,192</default>
+        </entry>
+    </group>
+</config>

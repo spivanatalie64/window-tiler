@@ -1,0 +1,21 @@
+{
+    "KPlugin": {
+        "Name": "WindowTiler",
+        "Description": "Custom window decorations with directional tiling buttons",
+        "Icon": "window-decoration",
+        "Authors": [
+            {
+                "Name": "Window Tiler",
+                "Email": ""
+            }
+        ],
+        "Id": "WindowTiler",
+        "Version": "1.0",
+        "License": "GPL-2.0+",
+        "Website": "",
+        "Category": "Window Decorations",
+        "ServiceTypes": [
+            "KWin/Decoration"
+        ]
+    }
+}

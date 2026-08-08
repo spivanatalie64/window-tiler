@@ -1,0 +1,66 @@
+#!/bin/bash
+# Window autosnap handler - called by FVVM's FvwmEvent on window move
+# Outputs FVVM commands to stdout
+
+wid=$1
+px=$2
+py=$3
+sw=$4
+sh=$5
+threshold=50
+bounce=6
+
+[ -z "$wid" ] && exit 0
+[ -z "$px" ] || [ -z "$py" ] || [ -z "$sw" ] || [ -z "$sh" ] && exit 0
+
+zone=""
+[ $px -le $threshold ] && zone="L"
+[ $px -ge $((sw - threshold)) ] && zone="${zone}R"
+[ $py -le $threshold ] && zone="${zone}T"
+[ $py -ge $((sh - threshold)) ] && zone="${zone}B"
+
+snap_half_v() {
+  local x="$1"
+  echo "WindowId $wid (!FixedSize, !Iconic) Maximize false"
+  echo "WindowId $wid (!FixedSize, !Iconic) ResizeMove frame 50wa 100wa $x 0"
+  if [ "$x" = "0" ]; then
+    echo "WindowId $wid (!FixedSize, !Iconic) AnimatedMove w-${bounce}p keep ewmhiwa"
+  else
+    echo "WindowId $wid (!FixedSize, !Iconic) AnimatedMove w+${bounce}p keep ewmhiwa"
+  fi
+  echo "Schedule 40 WindowId $wid AnimatedMove keep keep"
+}
+
+snap_half_h() {
+  local y="$1"
+  echo "WindowId $wid (!FixedSize, !Iconic) Maximize false"
+  echo "WindowId $wid (!FixedSize, !Iconic) ResizeMove frame 100wa 50wa 0 $y"
+  echo "Schedule 40 WindowId $wid AnimatedMove keep keep"
+}
+
+snap_quad() {
+  local x="$1" y="$2"
+  echo "WindowId $wid (!FixedSize, !Iconic) Maximize false"
+  echo "WindowId $wid (!FixedSize, !Iconic) ResizeMove frame 50wa 50wa $x $y"
+  if [ "$x" = "0" ]; then
+    echo "WindowId $wid (!FixedSize, !Iconic) AnimatedMove w-${bounce}p keep ewmhiwa"
+  else
+    echo "WindowId $wid (!FixedSize, !Iconic) AnimatedMove w+${bounce}p keep ewmhiwa"
+  fi
+  echo "Schedule 40 WindowId $wid AnimatedMove keep keep"
+}
+
+snap_max() {
+  echo "WindowId $wid (!FixedSize, !Iconic) Maximize true 100 100"
+}
+
+case "$zone" in
+  "LT") snap_quad 0 0 ;;
+  "RT") snap_quad -0 0 ;;
+  "LB") snap_quad 0 -0 ;;
+  "RB") snap_quad -0 -0 ;;
+  "L")  snap_half_v 0 ;;
+  "R")  snap_half_v -0 ;;
+  "T")  snap_max ;;
+  "B")  snap_half_h -0 ;;
+esac
